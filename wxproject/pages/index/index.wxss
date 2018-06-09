@@ -1,0 +1,7 @@
+/**index.wxss**/
+
+.indexImg{
+  width:367px;
+  height:665px;
+  
+}

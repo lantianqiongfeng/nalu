@@ -1,0 +1,7 @@
+<view  class="mask">
+  <image src='{{imagePath}}'  style="width:{{imageWidth}}rpx;height:{{imageHeigth}}rpx;"></image>
+</view>
+
+ <view class='canvas-box' >
+     <canvas mode='widthFix' style="width:420px;height:747px;" canvas-id="myCanvas" />
+ </view>

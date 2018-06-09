@@ -1,0 +1,25 @@
+<view >
+  <view class='Img' style='height:100%;width:100%;'>
+    <image class='editAdd' style='height:250rpx;width:250rpx;' src='/images/addimg.jpg' bindtap='bindAddImgTap'></image>
+  </view>
+  <view>
+  
+    <view >
+      <text>本地图片大小：{{initSize}}</text>
+    </view>
+    <view>
+      <block  wx:for="{{initImgUrls}}" wx:key="key">
+        <image src="{{item}}" class="slide-image" width="355" mode="widthFix" />
+      </block>
+    </view>
+    <view>
+      <text>上传图片大小：{{compressSize}}</text>
+    </view>
+    <view>
+      <image src="{{postImgUrl}}" class="slide-image"  mode="widthFix" />
+    </view>
+    <view class="{{showCanvas?'show':'hide'}}">
+    <canvas canvas-id="attendCanvasId"  />
+    </view>
+</view>
+</view>

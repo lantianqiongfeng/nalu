@@ -1,0 +1,90 @@
+.bodymain{
+  display: flex;
+  flex-direction: column;
+}
+.topleft{
+  display: flex;
+  flex-direction: row;
+  width: 200rpx;
+  overflow: hidden;
+  margin-left: 30rpx;
+}
+.topleft2{
+  width: 80rpx;
+  height: 140rpx;
+  margin-left: 20rpx;
+}
+.topleft1{
+  width: 100rpx;
+  height: 140rpx;
+}
+.topleft1 image{
+  width: 100rpx;
+  height: 100rpx;
+}
+.toprigth{
+   margin-right: 30rpx;
+}
+.toprigth ,.toprigth image{
+  height:146rpx;
+  width:146rpx;
+}
+.top{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  margin-bottom: 30rpx;
+  height: 160rpx;
+}
+.bottom ,.bottom image{
+  height:700rpx;
+  width:100%;
+}
+.recommend_scroll_x_box {
+  height: 245rpx;
+  white-space: nowrap;
+  display: flex;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.recommend_hot_box {
+  width: 230rpx;
+  height: 245rpx;
+  margin-right: 15rpx;
+  display: inline-block;
+}
+.sheet-item{
+  height: 70rpx;
+  line-height: 70rpx;
+  justify-content:center;
+  align-items:center;
+}
+.activesheet button {
+  border:none;
+  display: flex;
+  width:100%;
+  height: 100%;
+  justify-content:center;
+  align-items:center;
+}
+.activesheet button::after{
+  border:none;
+  justify-content:center;
+  align-items:center;
+   width:100%;
+  height: 100%;
+}
+.recommend_hot_image {
+  width: 235rpx;
+  height: 245rpx;
+}
+.sharetxt{
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+}

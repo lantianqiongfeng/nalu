@@ -1,0 +1,60 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "1.9.94",
+	"appid": "wx91f2f494744ac64d",
+	"projectname": "nalu",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "生成二维码",
+					"pathName": "pages/main/main",
+					"query": "",
+					"scene": "1013"
+				},
+				{
+					"id": -1,
+					"name": "转发1",
+					"pathName": "pages/main/main",
+					"query": "ss=12345a",
+					"scene": "1001"
+				},
+				{
+					"id": -1,
+					"name": "转发1",
+					"pathName": "pages/main/main",
+					"query": "ss=12345a",
+					"scene": "1036",
+					"referrerInfo": {}
+				}
+			]
+		}
+	}
+}

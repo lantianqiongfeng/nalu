@@ -1,0 +1,36 @@
+<view>
+  <view>
+    <swiper indicator-dots="true"
+      autoplay="false" >
+      <block wx:for="{{imgUrls}}" wx:key="key" >
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" width="355" height="150"/>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <view style='flex-direction: row;display: flex;'>
+    <view class='iconView'>
+        <view class='icon'>
+          <image class='iconImg' src='/images/roleicon.jpg'></image>
+        </view>
+        <view class='share' style='width:46rpx;'>
+          <image class='iconImg' src='/images/icon1.jpg' ></image>
+        </view>
+        <view class='share' style='width:46rpx;'>
+          <image class='iconImg' src='/images/share.jpg' ></image>
+        </view>
+     </view>
+        <view class='remark'>
+          <textarea class='txtarea'>
+          今天在立新广场路过时..............
+          .....................................
+          ............................................
+          ..........................................
+          ..........................................
+          ..........................................
+          </textarea>
+        </view>
+
+  </view>
+</view>

@@ -1,0 +1,20 @@
+.mask{
+  position: fixed;
+  
+  width: 100%;
+  /*opacity: 0; */
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  }
+.button{
+  
+  top: 20;
+  left: 0; 
+}
+.canvas-box{
+  width: 100%;  
+    position: fixed;  
+    left: 0;  
+    top: 999999rpx;  
+  }

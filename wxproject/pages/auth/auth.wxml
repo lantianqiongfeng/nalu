@@ -1,0 +1,2 @@
+<button bindgetuserinfo="onGetUserinfo" 
+open-type="getUserInfo" type="primary">用户授权</button>

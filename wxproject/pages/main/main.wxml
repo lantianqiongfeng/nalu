@@ -1,0 +1,74 @@
+<swiper class='swiperContent' current="{{currentTab}}" duration="300"  bindchange="swiperTab" >
+    <swiper-item >
+      <view class='main0'>
+        <view class='Img'>
+          <swiper indicator-dots="true"
+            autoplay="false" >
+            <block wx:for="{{swiperImgs}}" wx:key="key" >
+              <swiper-item>
+                <image src="{{item}}" class="slide-image" width="355" height="150"/>
+              </swiper-item>
+            </block>
+          </swiper>
+        </view>
+        <view class='txtRemark' >
+          <view class='txt'>
+            <text >已有　{{totalJoinAmt}} 人\r\n参与半把伞活动</text>
+          </view>
+          <view class='tbImg'>
+            <image src='../../images/tb.jpg' ></image>
+          </view>
+          <view class='selcityImg'>
+            <image src='../../images/mainselcity.jpg'></image>
+          </view>
+        </view>
+        <view class="cityLst">
+          <block wx:for="{{cityLst}}" wx:key="item.cityCode"  >
+            <view class="cityItem {{selCityItem==item.cityCode?'cityItemSel':'cityItemUnSel'}}"  bindtap='cityItemTap' id='{{item.cityCode}}'>
+            {{item.cityName}}
+            </view>
+          </block>
+        </view>
+        <view class='cityItemImgLst'>
+          <block wx:for="{{selCityImgLst}}" wx:key="item.cityCode" >
+            <view class='cityItemImgitem'>
+              <image src="{{item}}" bindtap='imgItemtag' id='{{item}}'></image>
+            </view>
+          </block>
+        </view>
+        <view class="cityRemark">
+          <text>{{selCityRemark}}</text>
+        </view>
+      </view>
+    </swiper-item>
+    <swiper-item>
+     
+    </swiper-item>
+    <swiper-item>
+     <view class="tc"  style="width:100%;">
+        <video src="{{src}}"   controls ></video>
+        <view class="btn-area">
+          <button bindtap="bindButtonTap">获取视频</button>
+        </view>
+      </view>
+
+      <view class=" tc" style="width:100%;">
+        <video id="myVideo" src="" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+        <view class="">
+          <button bindtap="bindButtonTap">获取视频</button>
+          <input bindblur="bindInputBlur"/>
+          <button bindtap="bindSendDanmu">发送弹幕</button>
+        </view>
+      </view>
+    </swiper-item>
+    <swiper-item><view>50%for others</view></swiper-item>
+    <swiper-item><view>我的</view></swiper-item>
+</swiper>
+<view class="swiper-tab" >
+    <view class="swiper-tab-item20 {{currentTab==0?'active':''}}" data-current="0" bindtap="clickTab">首页</view>
+    <view class="swiper-tab-item10 {{currentTab==1?'active':''}}" data-current="1" bindtap="clickTab">城市</view>
+    <view class="swiper-tab-item10 {{currentTab==2?'active':''}}" data-current="2" bindtap="clickTab">留言</view>
+    <view class="swiper-tab-item40 {{currentTab==3?'active':''}}" data-current="3" bindtap="clickTab">50%for others</view>
+     <view class="swiper-tab-item10 {{currentTab==4?'active':''}}" data-current="4" bindtap="clickTab">我的</view>
+</view>
+

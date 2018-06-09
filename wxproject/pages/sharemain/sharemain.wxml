@@ -1,0 +1,45 @@
+<view class='bodymain'>
+  <view class='top'>
+    <view class='topleft'>
+      <view class='topleft1'>
+      <view>
+        <image src='{{userIconPath}}'></image>
+      </view>
+      <view>
+      {{userInfo.nickName}}
+      </view>
+      </view>
+      <view class='topleft2'>
+        <text>我在\r\n北京</text>
+      </view>
+    </view>
+    <view class='toprigth'>
+      <image src='{{qrImgPath}}'></image>
+    </view>
+  </view>
+  <view class='bottom'>
+    <image src='{{cityImgPath}}'></image>
+  </view>
+  <view class='scrollview'>
+   <scroll-view class="recommend_scroll_x_box" scroll-x="true">
+      <view class="recommend_hot_box" wx:for="{{imgLst.previewLst}}" wx:key="item">
+        <image src="{{item}}" class="recommend_hot_image" bindtap='swiperImgTap'></image>
+      </view>
+    </scroll-view>
+  </view>
+ <view class='sharetxt'>
+ <button bindtap='bindsharetap'>转发</button>
+ </view>
+</view>
+<action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetChange" class="activesheet">
+    <block >
+        <action-sheet-item class="sheet-item" bindtap="bindItemTap" data-name="转发">
+          <button  open-type='share' >
+          转发
+          </button>
+        </action-sheet-item>
+        <action-sheet-item class="sheet-item" bindtap="bindItemTap" data-name="保存图片分享到朋友圈">保存图片分享到朋友圈</action-sheet-item>
+        
+    </block>
+    <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
+</action-sheet>

@@ -1,0 +1,9 @@
+.iconImg{
+  width: 46rpx;
+  height: 46rpx;
+}
+.iconView .icon,.share{
+  height: 33%;
+  margin-top: 5rpx;
+  margin-right: 10rpx;
+}

@@ -1,0 +1,4 @@
+<!--index.wxml-->
+<view class="container" bindtap='bindViewTap'>
+  <image class='indexImg' style="width: {{imagewidth}}px; height: {{imageheight}}px;"  src="{{imagefirstsrc}}" bindload="imageLoad" ></image>
+</view>
