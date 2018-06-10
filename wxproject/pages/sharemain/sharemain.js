@@ -109,7 +109,7 @@ Page({
     {
       var scene = decodeURIComponent(options.scene);
     }
-    
+   
     if (options && options.selData){
       var selData = JSON.parse(options.selData);
       if(selData){
@@ -141,7 +141,7 @@ Page({
         url: app.globalData.userInfo.avatarUrl, 
         success: function (res) {
           // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
-console.log(res)
+
           if (res.statusCode === 200) {
             app.globalData.userIcon = res.tempFilePath;
             that.setData({

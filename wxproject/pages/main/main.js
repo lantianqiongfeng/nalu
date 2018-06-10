@@ -297,19 +297,21 @@ Page({
       pictureUrl: url,
       path: "",//pages/index/index
       success: function (res) {
+        console.log("SAVESUCCESS");
         console.log(res);
         var postData = {
           selCityItem: that.data.selCityItem,
           selCityImgLst: that.data.selCityImgLst,
           selCurImg: url,
-          qrImgPath: res.qrcodUrl,
-          recordId: res.recordId
+          qrImgPath: res.data.qrcodUrl,
+          recordId: res.data.recordId
         }
+        console.log("postData");
         console.log(postData)
         wx.navigateTo({
           url: '../sharemain/sharemain?selData=' + JSON.stringify(postData)
         })
-        console.log("成功了");
+        console.log("成功了111");
       },
       fail: function (err) {
         //失败后的逻辑

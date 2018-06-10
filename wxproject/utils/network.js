@@ -507,7 +507,7 @@ function SaveCustomerRecord(options){
     },
     success: function (res) {
       console.log(res);
-      if(options&& options.succeess&& typeof(options.success)=="function"){
+      if (options && options.success && typeof (options.success)=="function"){
         options.success(res);
       }
       
