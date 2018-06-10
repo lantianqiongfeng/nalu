@@ -1,5 +1,6 @@
 {
   "pages":[
+    
     "pages/index/index",
     "pages/sharemain/sharemain",
    "pages/main/main",
@@ -9,6 +10,7 @@
     "pages/story/detail",
     "pages/EditStory/edit",
     "pages/share/share"
+    
 
   ],
   "window":{

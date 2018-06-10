@@ -45,6 +45,7 @@ App({
   },
   globalData: {
     userInfo: null,
+    userOpenId:'',
     userIcon:'',
     API_HOST: 'http://localhost:8070/nalu/',
     API_UploadURL:'http://localhost:53414/api/Lib2/TK/testUploadPost',

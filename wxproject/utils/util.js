@@ -71,7 +71,6 @@ function getCurrentPageUrlWithArgs() {
 
   return urlWithArgs
 }
-
 module.exports = {
   formatTime: formatTime,
   imageUtil: imageUtil,

@@ -378,6 +378,150 @@ function GetAccess_token(cb) {
     },
   });  
 }
+function GetUserOpenId(options){
+  wx.login({
+    success: function (res) {
+      console.log('wx.login')
+      console.log(res)
+      if (res.code) {
+        POST({
+          url: 'weixin/openId',
+          data: {
+            code:res.code,
+            nickName: app.globalData.userInfo.nickName,
+            avatarUrl: app.globalData.userInfo.avatarUrl
+          },
+          success: function (res) {
+            
+            if (res.statusCode && res.statusCode == "200") {
+              app.globalData.userOpenId = res.data.openId; //获取openid 
+              if(options && options.success && typeof(options.success)=="function"){
+                options.success();
+              }
+              
+            }
+          },
+          fail: function (err) {
+            //失败后的逻辑  
+            console.log(err);
+          },
+        });  
+        //发起网络请求
+        /*wx.request({
+          url: reqUrl,
+          data: {
+            
+          },
+          success: function (res) {
+            console.log("openid")
+            console.log(res)
+            app.globalData.userOpenId = res.data.openid; //获取openid  
+          }
+        })*/
+      } else {
+        console.log('登录失败！' + res.errMsg)
+      }
+    }
+  });
+}
+
+function GetUserInfo(options)
+{
+  var that = this;
+  var canIUse =wx.canIUse('button.open-type.getUserInfo');
+  
+  if (app.globalData.userInfo) {
+    
+      if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+        if (options && options.success && typeof (options.success) == "function") {
+          GetUserOpenId({
+            success: options.success
+          });
+        }
+        else{
+          GetUserOpenId();
+        }
+      }
+    
+
+  } else if (canIUse) {
+    console.log("main this.data.canIUse");
+    // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+    // 所以此处加入 callback 以防止这种情况
+    app.userInfoReadyCallback = res => {
+      app.globalData.userInfo = res.userInfo;
+      
+      if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+        if (options && options.success && typeof (options.success) == "function") {
+          GetUserOpenId({
+            success: options.success
+          });
+        }
+        else {
+          GetUserOpenId();
+        }
+      }
+    }
+  } else {
+    console.log("main !this.data.canIUse");
+    // 在没有 open-type=getUserInfo 版本的兼容处理
+    wx.getUserInfo({
+      success: res => {
+        app.globalData.userInfo = res.userInfo
+        
+        if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+          if (options && options.success && typeof (options.success) == "function") {
+            GetUserOpenId({
+              success: options.success
+            });
+          }
+          else {
+            GetUserOpenId();
+          }
+        }
+        console.log(res);
+      },
+      fail: err => {
+        console.log(err);
+        app.globalData.authReferURL = util.getCurrentPageUrlWithArgs();
+        console.log("refer:" + util.getCurrentPageUrlWithArgs());
+        wx.navigateTo({
+          url: '../../pages/auth/auth'
+        });
+      }
+    })
+  }
+
+}
+function SaveCustomerRecord(options){
+  console.log("before SaveCustomerRecord")
+  console.log(app.globalData.userOpenId)
+  console.log(options)
+  POST({
+    url: 'weixin/record',
+    data: {
+      openId: app.globalData.userOpenId,
+      cityCode: options.cityCode,
+      pictureUrl: options.pictureUrl,
+      path: options.path
+    },
+    success: function (res) {
+      console.log(res);
+      if(options&& options.succeess&& typeof(options.success)=="function"){
+        options.success(res);
+      }
+      
+      console.log("成功了");
+    },
+    fail: function (err) {
+      //失败后的逻辑
+      console.log(err);
+      console.log("失败了");
+    }
+  })
+
+}
+
 module.exports = {
   GET: GET,
   POST: POST,
@@ -387,5 +531,7 @@ module.exports = {
   UploadLocalImage: UploadLocalImage,
   CompressImg: CompressImg,
   GetAccess_token: GetAccess_token,
-  GetACode: GetACode
+  GetACode: GetACode,
+  GetUserInfo: GetUserInfo,
+  SaveCustomerRecord: SaveCustomerRecord
 }

@@ -37,23 +37,28 @@ Page({
     imagePath: "../../images/share_bottom.jpg",
     imageQR: "../../images/qrcode.jpg",
     cityLst:[
-      { "cityCode": "1", "cityName": "北京", "cityRemark": "明天北京下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], "previewLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] } },
-      { "cityCode": "2", "cityName": "上海", "cityRemark": "明天上海下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"], "previewLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"] } },
-      { "cityCode": "3", "cityName": "深圳", "cityRemark": "明天深圳下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], "previewLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] } },
-      { "cityCode": "4", "cityName": "广州", "cityRemark": "明天广州下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"], "previewLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"] } },
-      { "cityCode": "5", "cityName": "成都", "cityRemark": "明天成都下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], "previewLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] } },
-      { "cityCode": "6", "cityName": "杭州", "cityRemark": "明天杭州下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"], "previewLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"] } },
-      { "cityCode": "7", "cityName": "厦门", "cityRemark": "明天厦门下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], "previewLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] } },
-      { "cityCode": "8", "cityName": "香港", "cityRemark": "明天香港下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"], "previewLst": ["../../images/cityitem2.jpg", "../../images/cityitem2.jpg", "../../images/cityitem2.jpg"] } },
-      { "cityCode": "0", "cityName": "其他", "cityRemark": "明天全国下大雨啦！", "imgLst": { "orgLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], "previewLst": ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] } }
+     /* { "cityCode": "1", "cityName": "北京", "cityRemark": "明天北京下大雨啦！", "imgLst":[
+        { "originUrl": "../../images/cityitem1.jpg", "smallUrl":"../../images/cityitem1.jpg"},
+        { "originUrl": "../../images/cityitem1.jpg", "smallUrl": "../../images/cityitem1.jpg" },
+        { "originUrl": "../../images/cityitem1.jpg", "smallUrl": "../../images/cityitem1.jpg" }
+      ]} ,
+      { "cityCode": "2", "cityName": "上海", "cityRemark": "明天上海下大雨啦！", "imgLst":[
+        { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" },
+        { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" },
+        { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" }
+      ]  }*/
     ],
     canvasHidden:false,
     actionSheetHidden: true,
     actionSheetItems: ['转发', '保存图片分享到朋友圈'],
-    totalJoinAmt:2100, //已参与人
-    selCityItem:"1",
+    totalJoinAmt:"",//'2100', //已参与人
+    selCityItem:"",//"1",
     selCityRemark:"明天北京下大雨啦！",
-    selCityImgLst: ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"]
+    selCityImgLst: [/*
+      { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" },
+      { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" },
+      { "originUrl": "../../images/cityitem2.jpg", "smallUrl": "../../images/cityitem2.jpg" }*/
+    ]
   },
   cityItemTap:function(e){
     console.log(typeof(this.data.cityLst))
@@ -64,7 +69,7 @@ Page({
         if (this.data.cityLst[i].cityCode==e.currentTarget.id){
           this.setData({
             selCityItem: e.currentTarget.id,
-            selCityImgLst: this.data.cityLst[i].imgLst.previewLst,
+            selCityImgLst: this.data.cityLst[i].imgLst,
             selCityRemark:this.data.cityLst[i].cityRemark
           })
           break;
@@ -130,6 +135,7 @@ Page({
   },
   inputValue: '',
   onLoad: function (options) {
+    var that= this;
     // 页面初始化 options为页面跳转所带来的参数
     wx.setNavigationBarTitle({
       title: "伞主页",
@@ -145,46 +151,63 @@ Page({
       });
     }
     console.log("url id:" + Id);
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-      
-    } else if (this.data.canIUse) {
-      console.log("main this.data.canIUse");
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
+    network.GetUserInfo({
+      success: function () {
+        that.setData({
+          userInfo: app.globalData.userInfo,
           hasUserInfo: true
-        })
-        
+        });
       }
-    } else {
-      console.log("main !this.data.canIUse");
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-          
-          console.log(res);
-        },
-        fail:err=>{
-          console.log(err);
-          app.globalData.authReferURL = util.getCurrentPageUrlWithArgs();
-          console.log("refer:"+ util.getCurrentPageUrlWithArgs());
-          wx.navigateTo({
-            url: '../../pages/auth/auth'
+    })
+    
+    network.GET({
+      url: 'umbrella/total',
+      data: { },
+      success: function (res) {
+        console.log(res);
+        if(res.total){
+          that.setData({
+            totalJoinAmt: res.total
           });
         }
-      })
-    }
+        else{
+          that.setData({
+            totalJoinAmt: '0'
+          });
+        }
+        console.log("成功了");
+      },
+      fail: function (err) {
+        //失败后的逻辑  
+        console.log(err);
+        console.log("失败了");
+      },
+    });
+    network.GET({
+      url: 'umbrella/ALL',
+      data: {},
+      success: function (res) {
+        console.log(res);
+        if (res.data.pictures ) {
+          that.setData({
+            cityLst: res.data.pictures,
+            selCityImgLst: res.data.pictures[0].imgLst,
+            selCityItem: res.data.pictures[0].cityCode
+          });
+        }
+        else {
+          that.setData({
+            totalJoinAmt: '0'
+          });
+        }
+        console.log("成功了");
+      },
+      fail: function (err) {
+        //失败后的逻辑  
+        console.log(err);
+        console.log("失败了");
+      },
+    });
   }, getUserInfo: function (e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -259,11 +282,43 @@ Page({
     })
   },
   imgItemtag:function(e){
-    console.log(e)
+    var that = this;
     var url= e.currentTarget.id;
-    wx.navigateTo({
-      url: '../sharemain/sharemain'
-    })
+    if (that.data.selCityImgLst){
+      for (var i in that.data.selCityImgLst){
+        if (that.data.selCityImgLst[i].smallUrl==url){
+          url = that.data.selCityImgLst[i].originUrl;
+        }
+      }
+    }
+    
+    network.SaveCustomerRecord({
+      cityCode: that.data.selCityItem,
+      pictureUrl: url,
+      path: "",//pages/index/index
+      success: function (res) {
+        console.log(res);
+        var postData = {
+          selCityItem: that.data.selCityItem,
+          selCityImgLst: that.data.selCityImgLst,
+          selCurImg: url,
+          qrImgPath: res.qrcodUrl,
+          recordId: res.recordId
+        }
+        console.log(postData)
+        wx.navigateTo({
+          url: '../sharemain/sharemain?selData=' + JSON.stringify(postData)
+        })
+        console.log("成功了");
+      },
+      fail: function (err) {
+        //失败后的逻辑
+        console.log(err);
+        console.log("失败了");
+      },
+    });
+    
+    
   }
 
 

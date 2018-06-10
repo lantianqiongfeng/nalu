@@ -32,7 +32,7 @@
         <view class='cityItemImgLst'>
           <block wx:for="{{selCityImgLst}}" wx:key="item.cityCode" >
             <view class='cityItemImgitem'>
-              <image src="{{item}}" bindtap='imgItemtag' id='{{item}}'></image>
+              <image src="{{item.smallUrl}}" bindtap='imgItemtag' id='{{item.smallUrl}}'></image>
             </view>
           </block>
         </view>

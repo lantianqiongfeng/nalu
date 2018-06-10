@@ -1,5 +1,6 @@
 //share.js
 var util = require('../../utils/util.js');  
+var network = require('../../utils/network.js');
 const app = getApp();
 Page({
   data: {
@@ -11,7 +12,8 @@ Page({
     imageWidth:0,
     imageHeigth:0,
     GenImgHeight:0,
-    GenImgWidth:0
+    GenImgWidth:0,
+    userInfo:null
   },
   genImage:function(){
     var that =this;
@@ -47,56 +49,17 @@ Page({
     
   },
   onLoad: function (options) {
-    if (app.globalData.userInfo) {
-      console.log("app.globalData.userInfo:" + app.globalData.userInfo.nickName);
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-      // 页面初始化 options为页面跳转所带来的参数
-      //var size = this.setCanvasSize();//动态设置画布大小
-      this.genImage();
-    //创建初始化图片
-    } else if (this.data.canIUse) {
-      console.log("main this.data.canIUse");
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
+    var that = this;
+    network.GetUserInfo({
+      success: function () {
+        that.setData({
+          userInfo: app.globalData.userInfo,
           hasUserInfo: true
-        })
-        // 页面初始化 options为页面跳转所带来的参数
-        //var size = this.setCanvasSize();//动态设置画布大小
-        this.genImage();
-    //创建初始化图片
+        });
+        that.genImage();
       }
-    } else {
-      console.log("main !this.data.canIUse");
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-          console.log(res);
-          // 页面初始化 options为页面跳转所带来的参数
-          //var size = this.setCanvasSize();//动态设置画布大小
-          this.genImage();
-    //创建初始化图片
-        },
-        fail: err => {
-          console.log(err);
-          app.globalData.authReferURL = util.getCurrentPageUrlWithArgs();
-          console.log("refer:" + util.getCurrentPageUrlWithArgs());
-          wx.navigateTo({
-            url: '../../pages/auth/auth'
-          });
-        }
-      })
-    }
+    })
+    
     
   },
   //适配不同屏幕大小的canvas 

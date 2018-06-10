@@ -5,23 +5,29 @@ Page({
   data:{
     userInfo: null,
     hasUserInfo: false,
-    qrImgPath:'../../images/qrcode.jpg',
-      cityImgPath:'../../images/share_bottom.jpg',
+    qrImgPath:'',
+      cityImgPath:'',//../../images/share_bottom.jpg',
       userIconPath:'',
       userNickName:'',
       txtLocation:'北京',
       recordId:'',
       actionSheetHidden:true,
+      selCityItem:'',
+      recordId: '',
       imgLst: {
-        orgLst: ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], 
-        previewLst: ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] }
-    
+        /*orgLst: ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"], 
+        previewLst: ["../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg", "../../images/cityitem1.jpg"] 
+    */
+      }
   },
   swiperImgTap:function(e){
 
   },
-  onShareAppMessage: (res) => {
+  sendShareSuccessData:function(p){//分享成功保存相关数据
 
+  },
+  onShareAppMessage: (res) => {
+    var that = this;
     console.log("aa");
     if (res.from === 'button') {
       console.log("来自页面内转发按钮");
@@ -35,6 +41,13 @@ Page({
       path: '/pages/main/main?id=12345&from=' + app.globalData.userInfo.nickName,
       //imageUrl: app.globalData.mainShareImgUrl,//'/images/main0.jpg',
       success: (res) => {
+        that.sendShareSuccessData({
+          selImg: that.data.cityImgPath,
+          selCityCode: that.data.selCityItem,
+          userNickName: app.globalData.userInfo.nickName,
+          userIconPath: app.globalData.userInfo.avatarUrl,
+          userOpenId:''
+        });
         /* wx.showShareMenu({
            withShareTicket: true,
            success: function (res) {
@@ -72,6 +85,7 @@ Page({
   },
   bindItemTap: function (e) {
     if (e.currentTarget.dataset.name && e.currentTarget.dataset.name == "转发") {
+      
       wx.showShareMenu({
         withShareTicket: true,
         success: function (res) {
@@ -89,50 +103,36 @@ Page({
     console.log('tap ' + e.currentTarget.dataset.name);
   },
   onLoad: function (options) {
+    var that =this;
     // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     if (options && options.scene && options.scene!='')
     {
       var scene = decodeURIComponent(options.scene);
     }
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-      this.initData();
-    } else if (this.data.canIUse) {
-      console.log("main this.data.canIUse");
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
+    
+    if (options && options.selData){
+      var selData = JSON.parse(options.selData);
+      if(selData){
+        that.setData({
+          selCityItem: selData.selCityItem,
+          cityImgPath: selData.selCurImg,
+          imgLst: selData.selCityImgLst,
+          qrImgPath: selData.qrcodUrl,
+          recordId: selData.recordId
+        })
+      }
+      
+    }
+    network.GetUserInfo({
+      success: function () {
+        that.setData({
+          userInfo: app.globalData.userInfo,
           hasUserInfo: true
         })
-        this.initData();
+        that.initData();
       }
-    } else {
-      console.log("main !this.data.canIUse");
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-          this.initData();
-        },
-        fail: err => {
-          console.log(err);
-          app.globalData.authReferURL = util.getCurrentPageUrlWithArgs();
-          console.log("refer:" + util.getCurrentPageUrlWithArgs());
-          wx.navigateTo({
-            url: '../../pages/auth/auth'
-          });
-        }
-      })
-    }
+    })
+    
   },
   initData:function(p){
     var that = this;
