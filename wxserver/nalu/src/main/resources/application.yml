@@ -54,10 +54,10 @@ management:
     health:
       show-details: always
 nalu:
-#  appId: wx61b4da199d1ef172
-#  appSecret: a32f7126897b28a6d16ea96121411238
-  appId: wx91f2f494744ac64d
-  appSecret: 2fa2ce4477e4cc0b017f391e1f050fe8
+  #appId: wx91f2f494744ac64d
+  #appSecret: 2fa2ce4477e4cc0b017f391e1f050fe8
+  appId: wx37a4793cc1cb39fb
+  appSecret: 5e4615344fa12a261c290174c6b27859
   qrCodeUrl: https://api.weixin.qq.com/wxa/getwxacode
   unlimitCodeUrl: https://api.weixin.qq.com/wxa/getwxacodeunlimit
   tokenUrl: https://api.weixin.qq.com/cgi-bin/token
