@@ -95,9 +95,14 @@ public class QrCodeServiceImpl implements QrCodeService {
             param.put("is_hyaline",false);
             log.info("调用生成微信URL接口传参:" + param);
             byte[] result = httpService.doQrCodeRequest(qrUrl,param);
-            String viewPath = "/" + record.getOpenId() + "/" + record.getCityCode()+"/qrcode.jpg";
-            String resPath = saveQrCode(result,viewPath);
-            return configHolder.getNaluViewCodeUrl() +"/img"+ resPath;
+            String res = new String(result,"UTF-8");
+            if(res.contains("errcode")) {
+                log.info("create qrcode error===" + res);
+            }else {
+                String viewPath = "/" + record.getOpenId() + "/" + record.getCityCode()+"/qrcode.jpg";
+                String resPath = saveQrCode(result,viewPath);
+                return configHolder.getNaluViewCodeUrl() +"/img"+ resPath;
+            }
         } catch (Exception e) {
             log.info("get qrcode error===[{}]",e);
         }

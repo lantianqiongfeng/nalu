@@ -86,6 +86,7 @@ public class NaluController {
         record.setOpenId("oZrnl5eqyR70bYArZRqBBzchKpy4");
         record.setCityCode("shanghai");
         String response = qrCodeService.generateUnlimitCode(record,requestString);
+//        String response = qrCodeService.generateQrCode(requestString);
         return response;
     }
 
