@@ -1,0 +1,66 @@
+logging:
+  config: classpath:log4j2.xml
+  level:
+    org:
+      springframework:
+        web: INFO
+mybatis:
+  mapperLocations: classpath*:mapper/*Mapper.xml
+  typeAliasesPackage: com.ftvalue.security.dao
+server:
+  port: 8070
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.96.149.158:3306/nalu_umbrella
+    username: nalu
+    password: Vnalu@2018
+    #druid连接池配置
+    druid:
+      #初始化大小，最小，最大
+      initialSize: 5
+      minIdle: 5
+      maxActive: 300
+      #配置获取连接等待超时的时间
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      #配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      #打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      #通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
+      #合并多个DruidDataSource的监控数据
+      #useGlobalDataSourceStat: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  pid:
+    file: /opt/config/nalu/application.pid
+management:
+  endpoint:
+    health:
+      show-details: always
+nalu:
+#  appId: wx61b4da199d1ef172
+#  appSecret: a32f7126897b28a6d16ea96121411238
+  appId: wx91f2f494744ac64d
+  appSecret: 2fa2ce4477e4cc0b017f391e1f050fe8
+  qrCodeUrl: https://api.weixin.qq.com/wxa/getwxacode
+  unlimitCodeUrl: https://api.weixin.qq.com/wxa/getwxacodeunlimit
+  tokenUrl: https://api.weixin.qq.com/cgi-bin/token
+  openIdUrl: https://api.weixin.qq.com/sns/jscode2session
+  qrCodePath: D:/opt/static/nalu/img
+  viewCodeUrl: http://47.96.149.158
