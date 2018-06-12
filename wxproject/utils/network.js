@@ -115,14 +115,12 @@ function UploadFile(uploadHandler) {
     name: uploadHandler.fileName,
     formData: uploadHandler.data,
     success: function (res) {
-      console.log(res.data)
       if (uploadHandler.success && typeof (uploadHandler.success) == "function")
       {
         uploadHandler.sucess(res);
       }
     },
     fail: function (err) {
-      console.log(err)
       if (uploadHandler.fail && typeof (uploadHandler.fail) == "function")
       {
         uploadHandler.fail(err);
@@ -151,7 +149,7 @@ function DownloadFile(url, typ, success) {
       }
     },
     fail: function (err) {
-      console.log(err)
+      console.log("DownloadFile err",err)
     }
   })
 }
@@ -188,7 +186,6 @@ function request(method, requestHandler) {
       API_URL +=requestHandler.url;
     }
   }
-  console.log("api_url:"+API_URL);
   wx.request({
     url: API_URL,
     data: params,
@@ -225,7 +222,6 @@ function uploadImage(filePaths, successUp, failUp, i, length) {
       //'pictureAid': albumId
     },
     success: (resp) => {
-      console.log(resp);
       successUp++;
       console.log("successUp:"+successUp);
     },
@@ -255,7 +251,6 @@ function UploadLocalImage() {
       var failUp = 0; //失败个数
       var length = res.tempFilePaths.length; //总共个数
       var i = 0; //第几个
-      console.log(res);
       // 上传图片
       var canvasTempFilePaths = [];
       
@@ -272,10 +267,8 @@ function CompressImg(compressHandle){
      
     }
   });
-  console.log(model);
   if (model.indexOf("iPhone") >= 0) {
     //that.uploadFileOpt(that.data.attendSuccessImg);
-    console.log("noiphone")
   } else {
     drawCanvas({
       urlpath:compressHandle.url,
@@ -331,7 +324,7 @@ function GetACode(cb){
   GetAccess_token({
     success:function(res){
       var purl = app.globalData.WXACode_URL.replace(/placeholder/, res.access_token);
-      console.log("page" + Util.getCurrentPageUrl());
+      
       POST({
         url: purl,
         ignoreHost: "1",
@@ -342,7 +335,6 @@ function GetACode(cb){
           is_hyaline:true
         },
         success: function (ACoderes) {
-          console.log(ACoderes);
           if (ACoderes.statusCode && ACoderes.statusCode == "200") {
             if ( cb && cb.success && typeof (cb.success) == "function") {
               cb.success(ACoderes);
@@ -352,7 +344,7 @@ function GetACode(cb){
         },
         fail: function (err) {
           //失败后的逻辑  
-          console.log(err);
+          console.log("GetACode 失败",err);
         },
       })  
     }
@@ -366,7 +358,6 @@ function GetAccess_token(cb) {
     data: { },
     success: function (res) {
       if (res.statusCode && res.statusCode=="200"){
-        console.log(cb);
         if (res.data && cb&&cb.success && typeof (cb.success)=="function"){
           cb.success(res.data);
         }
@@ -374,15 +365,14 @@ function GetAccess_token(cb) {
     },
     fail: function (err) {
       //失败后的逻辑  
-      console.log(err);
+      console.log("GetAccess_token err",err);
     },
   });  
 }
 function GetUserOpenId(options){
   wx.login({
     success: function (res) {
-      console.log('wx.login')
-      console.log(res)
+      console.log("wx.login res.code", res.code)
       if (res.code) {
         POST({
           url: 'weixin/openId',
@@ -392,10 +382,10 @@ function GetUserOpenId(options){
             avatarUrl: app.globalData.userInfo.avatarUrl
           },
           success: function (res) {
-            
-            if (res.statusCode && res.statusCode == "200") {
+            console.log("weixin openId", res)
+            if (res.statusCode && res.statusCode == "200" && res.data.openId && res.data.openId!='') {
               app.globalData.userOpenId = res.data.openId; //获取openid 
-              if(options && options.success && typeof(options.success)=="function"){
+              if (options && options.success && typeof (options.success) == "function") {
                 options.success();
               }
               
@@ -403,23 +393,13 @@ function GetUserOpenId(options){
           },
           fail: function (err) {
             //失败后的逻辑  
-            console.log(err);
-          },
-        });  
-        //发起网络请求
-        /*wx.request({
-          url: reqUrl,
-          data: {
+            console.log("weixin get openId fail",err);
             
           },
-          success: function (res) {
-            console.log("openid")
-            console.log(res)
-            app.globalData.userOpenId = res.data.openid; //获取openid  
-          }
-        })*/
+        });  
+        
       } else {
-        console.log('登录失败！' + res.errMsg)
+        console.log('wx.login fail' + res.errMsg)
       }
     }
   });
@@ -431,8 +411,8 @@ function GetUserInfo(options)
   var canIUse =wx.canIUse('button.open-type.getUserInfo');
   
   if (app.globalData.userInfo) {
-    
-      if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+    console.log("app.globalData.userInfo is valid")
+    if (!app.globalData.userOpenId || app.globalData.userOpenId==''){
         if (options && options.success && typeof (options.success) == "function") {
           GetUserOpenId({
             success: options.success
@@ -441,17 +421,21 @@ function GetUserInfo(options)
         else{
           GetUserOpenId();
         }
+    }
+    else{
+      if (options && options.success && typeof (options.success) == "function") {
+        options.success(app.globalData.userInfo);
       }
+    } 
     
 
   } else if (canIUse) {
     console.log("main this.data.canIUse");
     // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
     // 所以此处加入 callback 以防止这种情况
-    app.userInfoReadyCallback = res => {
+    app.userInfoReadyCallback = function(res) {
       app.globalData.userInfo = res.userInfo;
-      
-      if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+      if (!app.globalData.userOpenId || app.globalData.userOpenId == '') {
         if (options && options.success && typeof (options.success) == "function") {
           GetUserOpenId({
             success: options.success
@@ -461,6 +445,11 @@ function GetUserInfo(options)
           GetUserOpenId();
         }
       }
+      else{
+        if (options && options.success && typeof (options.success) == "function") {
+          options.success(app.globalData.userInfo);
+        }
+      }
     }
   } else {
     console.log("main !this.data.canIUse");
@@ -468,8 +457,7 @@ function GetUserInfo(options)
     wx.getUserInfo({
       success: res => {
         app.globalData.userInfo = res.userInfo
-        
-        if (!app.globalData.userOpenId || !app.globalData.userOpenId == '') {
+        if (!app.globalData.userOpenId || app.globalData.userOpenId == '') {
           if (options && options.success && typeof (options.success) == "function") {
             GetUserOpenId({
               success: options.success
@@ -479,12 +467,16 @@ function GetUserInfo(options)
             GetUserOpenId();
           }
         }
-        console.log(res);
+        else{
+          if (options && options.success && typeof (options.success) == "function") {
+            options.success(app.globalData.userInfo);
+          }
+        }
+        
       },
       fail: err => {
-        console.log(err);
+        console.log("wx.getUserInfo fail",err);
         app.globalData.authReferURL = util.getCurrentPageUrlWithArgs();
-        console.log("refer:" + util.getCurrentPageUrlWithArgs());
         wx.navigateTo({
           url: '../../pages/auth/auth'
         });
@@ -494,9 +486,6 @@ function GetUserInfo(options)
 
 }
 function SaveCustomerRecord(options){
-  console.log("before SaveCustomerRecord")
-  console.log(app.globalData.userOpenId)
-  console.log(options)
   POST({
     url: 'weixin/record',
     data: {
@@ -506,17 +495,13 @@ function SaveCustomerRecord(options){
       path: options.path
     },
     success: function (res) {
-      console.log(res);
       if (options && options.success && typeof (options.success)=="function"){
         options.success(res);
       }
-      
-      console.log("成功了");
     },
     fail: function (err) {
       //失败后的逻辑
-      console.log(err);
-      console.log("失败了");
+      console.log(" SaveCustomerRecord err", err);
     }
   })
 

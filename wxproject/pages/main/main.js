@@ -34,8 +34,8 @@ Page({
         time: 3
       }],
     fromSource: "",
-    imagePath: "../../images/share_bottom.jpg",
-    imageQR: "../../images/qrcode.jpg",
+    imagePath: "",
+    imageQR: "",
     cityLst:[
      /* { "cityCode": "1", "cityName": "北京", "cityRemark": "明天北京下大雨啦！", "imgLst":[
         { "originUrl": "../../images/cityitem1.jpg", "smallUrl":"../../images/cityitem1.jpg"},
@@ -61,11 +61,9 @@ Page({
     ]
   },
   cityItemTap:function(e){
-    console.log(typeof(this.data.cityLst))
     var selImgLst=[];
     if (this.data.cityLst && this.data.cityLst.length>0){
       for (var i in this.data.cityLst){
-        console.log(this.data.cityLst[i])
         if (this.data.cityLst[i].cityCode==e.currentTarget.id){
           this.setData({
             selCityItem: e.currentTarget.id,
@@ -95,7 +93,7 @@ Page({
       wx.showShareMenu({
         withShareTicket: true,
         success:function(res){
-          console.log(res)
+          console.log("转发按钮",res)
         }
       })
     
@@ -105,8 +103,6 @@ Page({
         url: '../share/share'
       })
     }
-    console.log(e);
-    console.log('tap ' + e.currentTarget.dataset.name);
   },
   bindInputBlur: function (e) {
     this.inputValue = e.detail.value
@@ -143,14 +139,12 @@ Page({
         // success
       }
     });
-    console.log(options);
     var Id = options.id;
     if (options.from) {
       this.setData({
         fromSource: options.from,
       });
     }
-    console.log("url id:" + Id);
     network.GetUserInfo({
       success: function () {
         that.setData({
@@ -164,7 +158,6 @@ Page({
       url: 'umbrella/total',
       data: { },
       success: function (res) {
-        console.log(res);
         if(res.total){
           that.setData({
             totalJoinAmt: res.total
@@ -175,19 +168,16 @@ Page({
             totalJoinAmt: '0'
           });
         }
-        console.log("成功了");
       },
       fail: function (err) {
         //失败后的逻辑  
         console.log(err);
-        console.log("失败了");
       },
     });
     network.GET({
       url: 'umbrella/ALL',
       data: {},
       success: function (res) {
-        console.log(res);
         if (res.data.pictures ) {
           that.setData({
             cityLst: res.data.pictures,
@@ -200,16 +190,13 @@ Page({
             totalJoinAmt: '0'
           });
         }
-        console.log("成功了");
       },
       fail: function (err) {
         //失败后的逻辑  
         console.log(err);
-        console.log("失败了");
       },
     });
   }, getUserInfo: function (e) {
-    console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -218,10 +205,8 @@ Page({
   },
   onShareAppMessage: (res) => {
     
-    console.log("aa");
     if (res.from === 'button') {
       console.log("来自页面内转发按钮");
-      console.log(res.target);
     }
     else {
       console.log("来自右上角转发菜单")
@@ -235,8 +220,7 @@ Page({
           withShareTicket: true,
           success: function (res) {
             // 分享成功
-            console.log('shareMenu share success')
-            console.log(res)
+            
           },
           fail: function (res) {
             // 分享失败
@@ -291,14 +275,13 @@ Page({
         }
       }
     }
-    
+    //保存用户记录
     network.SaveCustomerRecord({
       cityCode: that.data.selCityItem,
       pictureUrl: url,
-      path: "",//pages/index/index
+      path: app.globalData.share_Url,//pages/index/index
       success: function (res) {
-        console.log("SAVESUCCESS");
-        console.log(res);
+        console.log("SaveCustomerRecord ", res)
         var postData = {
           selCityItem: that.data.selCityItem,
           selCityImgLst: that.data.selCityImgLst,
@@ -306,17 +289,13 @@ Page({
           qrImgPath: res.data.qrcodUrl,
           recordId: res.data.recordId
         }
-        console.log("postData");
-        console.log(postData)
         wx.navigateTo({
           url: '../sharemain/sharemain?selData=' + JSON.stringify(postData)
         })
-        console.log("成功了111");
       },
       fail: function (err) {
         //失败后的逻辑
-        console.log(err);
-        console.log("失败了");
+        console.log("SaveCustomerRecord 失败", err);
       },
     });
     

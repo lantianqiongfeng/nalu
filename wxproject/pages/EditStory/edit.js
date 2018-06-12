@@ -28,7 +28,6 @@ Page({
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
         var filePaths = res.tempFilePaths;
-        console.log(res);
         that.setData({
           initImgUrls: filePaths,
           initSize:res.tempFiles[0].size,
@@ -48,7 +47,6 @@ Page({
             url:filePaths[0],
             success: function (compres) {
               wx.hideToast()
-              console.log("compres.tempFilePath:" + compres.tempFilePath);
               that.setData({
                 postImgUrl: compres.tempFilePath,
                 showCanvas:false
@@ -56,7 +54,6 @@ Page({
               wx.getImageInfo({
                 src: compres.tempFilePath,
                 success: function (imgRes) {
-                  console.log(imgRes);
                   that.setData({
                     compressSize: imgRes.width * imgRes.height,
                     
@@ -68,7 +65,6 @@ Page({
           });
         
           var Key = filePath.substr(filePath.lastIndexOf('/') + 1); // 这里指定上传的文件名
-          console.log("filePath:" + filePath + " filePaths[0]:" + filePaths[0]);
           /*wx.uploadFile({
             url: 'http://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
             filePath: filePath,

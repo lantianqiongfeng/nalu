@@ -23,7 +23,7 @@
   <view class='scrollview'>
    <scroll-view class="recommend_scroll_x_box" scroll-x="true">
       <view class="recommend_hot_box" wx:for="{{imgLst}}" wx:key="item">
-        <image src="{{item.smallUrl}}" class="recommend_hot_image" bindtap='swiperImgTap'></image>
+        <image src="{{item.smallUrl}}" class="recommend_hot_image" bindtap='swiperImgTap' id="{{item.originUrl}}" ></image>
       </view>
     </scroll-view>
   </view>

@@ -4,7 +4,7 @@ var network = require('../../utils/network.js');
 const app = getApp();
 Page({
   data: {
-    imagePath: '../../images/shareimg_bg.jpg',
+    imagePath: '',
     GenPath: '../../images/share_bottom.jpg',
     imageQR: "../../images/qrcode.jpg",
     maskHidden: false,
@@ -121,7 +121,6 @@ Page({
     //context.drawImage(imageZw, size.w / 2 - 25, size.h * 0.7, size.w * 0.14, size.w * 0.14);
     this.settextLocation(context);
     this.setUserInfos(context);
-    console.log(size.w, size.h)
     //绘制图片
     context.draw();
     //将生成好的图片保存到本地，需要延迟一会，绘制期间耗时
@@ -135,7 +134,6 @@ Page({
         canvasId: 'myCanvas',
         success: function (res) {
           var tempFilePath = res.tempFilePath;
-          console.log(tempFilePath);
           that.setData({
             imagePath: tempFilePath,
             canvasHidden: false,

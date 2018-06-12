@@ -6,7 +6,7 @@ Page({
     userInfo: null,
     hasUserInfo: false,
     qrImgPath:'',
-      cityImgPath:'',//../../images/share_bottom.jpg',
+      cityImgPath:'',
       userIconPath:'',
       userNickName:'',
       txtLocation:'北京',
@@ -21,32 +21,53 @@ Page({
       }
   },
   swiperImgTap:function(e){
-
+    var that = this;
+    that.setData({
+      cityImgPath:e.currentTarget.id
+    })
   },
-  sendShareSuccessData:function(p){//分享成功保存相关数据
-
+  saveUserRecord:function(options){
+    var that =this;
+    network.SaveCustomerRecord({
+      cityCode: that.data.selCityItem,
+      pictureUrl: that.data.cityImgPath,
+      path: app.globalData.share_Url,//pages/index/index
+      success: function (res) {
+        if(options&& options.success && typeof(options.success)=="function"){
+          options.success(res);
+        }
+      },
+      fail: function (err) {
+        //失败后的逻辑
+        console.log("SaveCustomerRecord 失败", err);
+        if (options && options.fail && typeof (options.fail) == "function") {
+          options.fail(err);
+        }
+      },
+    });
   },
   onShareAppMessage: (res) => {
     var that = this;
-    console.log("aa");
     if (res.from === 'button') {
-      console.log("来自页面内转发按钮");
-      console.log(res.target);
+      console.log("来自页面内转发按钮",res.target);
     }
     else {
-      console.log("来自右上角转发菜单")
+      console.log("来自右上角转发菜单", res.target)
     }
     return {
       title: '',
       path: '/pages/main/main?id=12345&from=' + app.globalData.userInfo.nickName,
       //imageUrl: app.globalData.mainShareImgUrl,//'/images/main0.jpg',
       success: (res) => {
-        that.sendShareSuccessData({
-          selImg: that.data.cityImgPath,
-          selCityCode: that.data.selCityItem,
-          userNickName: app.globalData.userInfo.nickName,
-          userIconPath: app.globalData.userInfo.avatarUrl,
-          userOpenId:''
+        //保存用户记录
+        that.saveUserRecord({
+          success: function (res) {
+            
+          },
+          fail: function (err) {
+            //失败后的逻辑
+            console.log("SaveCustomerRecord 失败", err);
+          },
         });
         /* wx.showShareMenu({
            withShareTicket: true,
@@ -84,23 +105,32 @@ Page({
     });
   },
   bindItemTap: function (e) {
+    var that=this;
     if (e.currentTarget.dataset.name && e.currentTarget.dataset.name == "转发") {
       
       wx.showShareMenu({
         withShareTicket: true,
         success: function (res) {
-          console.log(res)
+          console.log("转发按钮成功后返回消息",res)
         }
       })
 
     }
     else if (e.currentTarget.dataset.name && e.currentTarget.dataset.name == "保存图片分享到朋友圈") {
-      wx.navigateTo({
-        url: '../share/share'
-      })
+      that.saveUserRecord({
+        success: function (res) {
+          wx.navigateTo({
+            url: '../share/share'
+          })
+        },
+        fail: function (err) {
+          //失败后的逻辑
+          console.log("SaveCustomerRecord 失败", err);
+        },
+      });
+      
     }
-    console.log(e);
-    console.log('tap ' + e.currentTarget.dataset.name);
+    console.log("保存图片分享到朋友圈",e);
   },
   onLoad: function (options) {
     var that =this;
@@ -113,13 +143,15 @@ Page({
     if (options && options.selData){
       var selData = JSON.parse(options.selData);
       if(selData){
+        console.log("seldata",selData)
         that.setData({
           selCityItem: selData.selCityItem,
           cityImgPath: selData.selCurImg,
           imgLst: selData.selCityImgLst,
-          qrImgPath: selData.qrcodUrl,
+          qrImgPath: selData.qrImgPath,
           recordId: selData.recordId
         })
+        console.log("onLoad seldata",that.data);
       }
       
     }
@@ -141,7 +173,7 @@ Page({
         url: app.globalData.userInfo.avatarUrl, 
         success: function (res) {
           // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
-
+          console.log("downloadFile success",res)
           if (res.statusCode === 200) {
             app.globalData.userIcon = res.tempFilePath;
             that.setData({
@@ -151,7 +183,7 @@ Page({
 
         },
         fail:function(err){
-          console.log(err)
+          console.log("initData downloadFile下载用户头像失败",err)
         }
       })
     }
